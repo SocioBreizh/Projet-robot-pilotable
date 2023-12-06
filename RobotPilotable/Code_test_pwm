@@ -2,52 +2,97 @@
 #include "hardware/pwm.h"
 
 // put function declarations here:
-void avancer();
+int avantDroite (int vitesse);
+int avantGauche (int vitesse);
+int arriereDroite (int vitesse);
+int arriereGauche (int vitesse);
 
 void setup() {
-  //gp10 et 12 pour avancer
-  //gp11 et 13 pour reculer
   // put your setup code here, to run once:
+  avantDroite(0);
+  avantGauche(0);
+  arriereDroite(0);
+  arriereGauche(0);
 
 }
-
 void loop() {
   // put your main code here, to run repeatedly:
-  const uint pwm_pin_droite = 10; 
-  gpio_set_function(pwm_pin_droite, GPIO_FUNC_PWM);
-  const uint sliceDroite = pwm_gpio_to_slice_num(pwm_pin_droite); // slice associée à GP10
-  const uint channelDroite = pwm_gpio_to_channel(pwm_pin_droite);  // channel associée à GP10
-  pwm_set_clkdiv(sliceDroite, 256);
-  pwm_set_wrap(sliceDroite,9764);
-  pwm_set_chan_level(sliceDroite, channelDroite, 0);
-  pwm_set_enabled(sliceDroite,true);
+ 
+bool etatAvtD(LOW),etatArrD(LOW),etatAvtG(LOW),etatArrG(LOW);
 
-  const uint pwm_pin_gauche = 12; 
-  gpio_set_function(pwm_pin_gauche, GPIO_FUNC_PWM);
-  const uint sliceGauche = pwm_gpio_to_slice_num(pwm_pin_gauche); // slice associée à GP12
-  const uint channelGauche = pwm_gpio_to_channel(pwm_pin_gauche);  // channel associée à GP12
-  pwm_set_clkdiv(sliceGauche, 256);
-  pwm_set_wrap(sliceGauche,9764);
-  pwm_set_chan_level(sliceGauche, channelGauche, 0);
-  pwm_set_enabled(sliceGauche,true);
+delay(2000);
+avantDroite(9000);
+avantGauche(9000);
+delay(3000);
+avantDroite(0);
+arriereDroite(9000);
+delay(3000);
+arriereDroite(0);
+avantDroite(9000);
+avantGauche(0);
+arriereGauche(9000);
+delay(3000);
+  avantDroite(0);
+  avantGauche(0);
+  arriereDroite(0);
+  arriereGauche(0);
 
 
 
-  pwm_set_chan_level(sliceDroite, channelDroite, 5000);
-  pwm_set_chan_level(sliceGauche, channelGauche, 5000);
-  delay (5000);
 
-  pwm_set_chan_level(sliceDroite, channelDroite, 0);
-  pwm_set_chan_level(sliceGauche, channelGauche, 5000);
-  delay(5000);
 
-  pwm_set_chan_level(sliceDroite, channelDroite, 5000);
-  pwm_set_chan_level(sliceGauche, channelGauche, 0);
-  delay(5000);
+
+
 
 
 }
 
 // put function definitions here:
-void myFunction() {
+int avantDroite (int vitesse){
+    const uint pwm_pin_droite = 10; 
+  gpio_set_function(pwm_pin_droite, GPIO_FUNC_PWM);
+  const uint sliceDroite = pwm_gpio_to_slice_num(pwm_pin_droite); // slice associée à GP10
+  const uint channelDroite = pwm_gpio_to_channel(pwm_pin_droite);  // channel associée à GP10
+  pwm_set_clkdiv(sliceDroite, 256);
+  pwm_set_wrap(sliceDroite,9764);
+  pwm_set_chan_level(sliceDroite, channelDroite, vitesse);
+  pwm_set_enabled(sliceDroite,true);
+  if(vitesse>0) return 1;
+  return 0;
+}
+int avantGauche (int vitesse){
+      const uint pwm_pin_gauche = 12; 
+  gpio_set_function(pwm_pin_gauche, GPIO_FUNC_PWM);
+  const uint sliceGauche = pwm_gpio_to_slice_num(pwm_pin_gauche); // slice associée à GP12
+  const uint channelDroite = pwm_gpio_to_channel(pwm_pin_gauche);  // channel associée à GP12
+  pwm_set_clkdiv(sliceGauche, 256);
+  pwm_set_wrap(sliceGauche,9764);
+  pwm_set_chan_level(sliceGauche, channelDroite, vitesse);
+  pwm_set_enabled(sliceGauche,true);
+  if(vitesse>0) return 1;
+  return 0;
+}
+int arriereDroite (int vitesse){
+      const uint pwm_pin_arr_droite = 11; 
+  gpio_set_function(pwm_pin_arr_droite, GPIO_FUNC_PWM);
+  const uint sliceArrDroite = pwm_gpio_to_slice_num(pwm_pin_arr_droite); // slice associée à GP11
+  const uint channelArrDroite = pwm_gpio_to_channel(pwm_pin_arr_droite);  // channel associée à GP11
+  pwm_set_clkdiv(sliceArrDroite, 256);
+  pwm_set_wrap(sliceArrDroite,9764);
+  pwm_set_chan_level(sliceArrDroite, channelArrDroite, vitesse);
+  pwm_set_enabled(sliceArrDroite,true);
+    if(vitesse>0) return 1;
+  return 0;
+}
+int arriereGauche (int vitesse){
+    const uint pwm_pin_arr_gauche = 13; 
+  gpio_set_function(pwm_pin_arr_gauche, GPIO_FUNC_PWM);
+  const uint sliceArrGauche = pwm_gpio_to_slice_num(pwm_pin_arr_gauche); // slice associée à GP13
+  const uint channelArrGauche = pwm_gpio_to_channel(pwm_pin_arr_gauche);  // channel associée à GP13
+  pwm_set_clkdiv(sliceArrGauche, 256);
+  pwm_set_wrap(sliceArrGauche,9764);
+  pwm_set_chan_level(sliceArrGauche, channelArrGauche, vitesse);
+  pwm_set_enabled(sliceArrGauche,true);
+    if(vitesse>0) return 1;
+  return 0;
 }
