@@ -39,7 +39,7 @@ void setup()
     }
 
     gestionServeur.begin(); // init route http
-    
+    myPilotage.setup();
 }
 
 void fctTime() // fonctio contenant les fonctions appellées périodiquement 
@@ -68,9 +68,10 @@ void fctTime() // fonctio contenant les fonctions appellées périodiquement
 void loop(void)
 {
     
-    gestionServeur.handleClient(); // Gère les requêtes client
-    MDNS.update(); // Gère la résolution DNS
-    fctTime(); // Gère les appels périodique
-    myPilotage.loop();
+    //gestionServeur.handleClient(); // Gère les requêtes client
+   // MDNS.update(); // Gère la résolution DNS
+    //fctTime(); // Gère les appels périodique
+    //myPilotage.commande(gestionServeur.getjoyX(),gestionServeur.getjoyY());
+    myPilotage.essai();
 }
 

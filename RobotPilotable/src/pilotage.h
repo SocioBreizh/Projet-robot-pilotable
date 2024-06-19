@@ -1,7 +1,6 @@
 #ifndef PILOTAGE_H
 #define PILOTAGE_H
 
-#include <hardware/pwm.h>
 #include <Arduino.h>
 
 class Pilotage {
@@ -16,8 +15,9 @@ private:
 public:
     Pilotage();
     void setup();
-    void loop();
+    void essai();
     void commandeVitesse(uint16_t vitesseAvtD, uint16_t vitesseAvtG, uint16_t vitesseArrD, uint16_t vitesseArrG);
+    void commande(int x, int y);
 };
 
 #endif // PILOTAGE_H

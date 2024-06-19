@@ -2,25 +2,26 @@
 #include <hardware/pwm.h>
 #include <Arduino.h>
 
-#define AVANT_DROITE_PWM_PIN 10 
-#define AVANT_GAUCHE_PWM_PIN 12
-#define ARRIERE_DROITE_PWM_PIN 11
-#define ARRIERE_GAUCHE_PWM_PIN 13
-#define DIVISEUR 40  
+#define AVANT_DROITE_PWM_PIN 12 
+#define AVANT_GAUCHE_PWM_PIN 10
+#define ARRIERE_DROITE_PWM_PIN 13
+#define ARRIERE_GAUCHE_PWM_PIN 11
+#define DIVISEUR 10 
 #define WRAP 62500
 
 Pilotage::Pilotage() {}
 
+// Configuration des signaux pwm
 void Pilotage::setup() {
-    // Configuration des signaux pwm
+    
     init_PWM_PIN(AVANT_DROITE_PWM_PIN);
     init_PWM_PIN(AVANT_GAUCHE_PWM_PIN);
     init_PWM_PIN(ARRIERE_DROITE_PWM_PIN);
     init_PWM_PIN(ARRIERE_GAUCHE_PWM_PIN);
 }
-
-void Pilotage::loop() {
-    // test de marche avec commandes simple
+// test de marche avec commandes simple
+void Pilotage::essai() {
+    
     commandeVitesse(0,0,0,0);
     delay(5000);
     commandeVitesse(24000,24000,0,0);
@@ -83,4 +84,41 @@ uint16_t Pilotage::pourcentageToValeur(int pourcentage) {
 
     // Calculer la valeur linéaire entre 24000 et 62500 (24000 valeur mini pour fonctionnement moteur, 62500 valeur max du wrap)
     return static_cast<uint16_t>(24000 + (pourcentage / 100.0) * (WRAP - 24000));
+}
+
+void Pilotage::commande(int x,int y){ // découpage par zone de joystick, à optimiser
+//zone morte si curseur trop proche du centre
+ if (abs(x) < 20) {
+        x = 0;
+ }
+ if (abs(y) < 20) {
+        y = 0;
+ }
+ if (x==0 && y==0){//a l'arrêt
+    commandeVitesse(0,0,0,0);
+ }
+ else if (x==0 && y>20){//avance tout droit
+    commandeVitesse(60000,60000,0,0);
+ }
+ else if (x==0 && y<-20){//recule tout droit
+    commandeVitesse(0,0,60000,60000);
+ }
+ else if (x>=20 && y==0){//tourne sur soi-même vers la droite
+    commandeVitesse(0,60000,60000,0);
+ }
+ else if (x<=-20 && y==0){//tourne sur soi-même vers la gauche
+    commandeVitesse(60000,0,0,60000);
+ }
+ else if (x>=20 && y>=20){//tourne vers la droite en avançant
+    commandeVitesse(25000,60000,0,0);
+ }
+ else if (x<=-20 && y>=20){//tourne vers la gauche en avançant
+    commandeVitesse(60000,25000,0,0);
+ }
+ else if (x>=20 && y<=-20){//tourne vers la droite en reculant
+    commandeVitesse(0,0,0,60000);
+ }
+ else if (x<=-20 && y<=-20){//tourne vers la droite en reculant
+    commandeVitesse(0,0,60000,0);
+ }
 }
